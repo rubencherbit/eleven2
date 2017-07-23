@@ -6,7 +6,7 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: en
+    locale: fr
 
 framework:
     #esi: ~
@@ -76,3 +76,9 @@ doctrine_migrations:
     name: Application Migrations
 # Nelmio Api Doc Bundle
 nelmio_api_doc: ~
+#
+fos_rest:
+    routing_loader:
+        default_format: json
+    view:
+        view_response_listener: true
