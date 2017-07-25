@@ -7,3 +7,4 @@ NelmioApiDocBundle:
 astronaut:
     type:     rest
     resource: AppBundle\Controller\AstronautController
+    prefix: api
