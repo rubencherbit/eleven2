@@ -10,4 +10,19 @@ namespace AppBundle\Repository;
  */
 class AstronautRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findAllAstronauts($offset = null, $limit = null)
+    {
+        $qb = $this->createQueryBuilder('a');
+        $qb->select('a');
+
+        if ($offset != null) {
+            $qb->setFirstResult($offset);
+        }
+
+        if ($limit != null) {
+            $qb->setMaxResults($limit);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }
