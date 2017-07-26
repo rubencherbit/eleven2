@@ -12,12 +12,12 @@ class AstronautControllerTest extends WebTestCase
     protected function setUp()
     {
         $this->client = new Client([
-            'base_uri' => ''
+            'base_uri' => 'http://eleven2.dev'
         ]);
     }
     public function testget()
     {
-        $response = $this->client->get('/astronauts/1', [
+        $response = $this->client->get('/api/astronauts/1', [
         ]);
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -33,7 +33,7 @@ class AstronautControllerTest extends WebTestCase
 
     public function testcget()
     {
-        $response = $this->client->get('/astronauts', [
+        $response = $this->client->get('/api/astronauts', [
         ]);
 
         $this->assertEquals(200, $response->getStatusCode());
