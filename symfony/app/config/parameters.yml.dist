@@ -17,3 +17,6 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
+
+    router.request_context.host: example.com
+    router.request_context.scheme: http
