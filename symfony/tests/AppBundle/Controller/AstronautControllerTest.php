@@ -8,11 +8,18 @@ use GuzzleHttp\Client;
 class AstronautControllerTest extends WebTestCase
 {
     protected $client;
+    private $container;
+    private $base_uri;
 
     protected function setUp()
     {
+        self::bootKernel();
+
+        $this->container = self::$kernel->getContainer();
+        $this->base_uri = $this->container->get('router')->getContext()->getScheme() . '://' . $this->container->get('router')->getContext()->getHost();
+
         $this->client = new Client([
-            'base_uri' => 'http://eleven2.dev'
+            'base_uri' => $this->base_uri
         ]);
     }
     public function testget()
@@ -47,7 +54,21 @@ class AstronautControllerTest extends WebTestCase
         $this->assertArrayHasKey('weight', $data[0]);
     }
 
-    // public function testpost()
-    // {
-    // }
+    public function testpost()
+    {
+        $data = [
+        'name' => "Mqwe",
+        'birthdate' => '01-01-1970',
+        'weight' => 70,
+        'height' => 190
+        ];
+
+        $response = $this->client->post('/api/astronauts', ['json' => $data]);
+        $this->assertEquals(201, $response->getStatusCode());
+        $data = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('name', $data);
+        $this->assertArrayHasKey('birthdate', $data);
+        $this->assertArrayHasKey('weight', $data);
+        $this->assertArrayHasKey('height', $data);
+    }
 }
