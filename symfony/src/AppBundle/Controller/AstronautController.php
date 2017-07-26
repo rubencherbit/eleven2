@@ -11,6 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Form\AstronautType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use AppBundle\Entity\Astronaut;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Request\ParamFetcher;
 
 /**
  * Class AstronautController
@@ -31,18 +36,21 @@ class AstronautController extends FOSRestController implements ClassResourceInte
      *     statusCodes={
      *         200 = "Returned when successful",
      *         404 = "Return when not found"
+     *     },
+     *     requirements={
+     *      {
+     *          "name"="astronaut",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="id"
+     *      }
      *     }
      * )
      * @Rest\View()
+     * @ParamConverter("astronaut", class="AppBundle:Astronaut")
      */
-    public function getAction(int $id)
+    public function getAction(Astronaut $astronaut)
     {
-        $astronaut = $this->getDoctrine()->getRepository('AppBundle:Astronaut')->find($id);
-
-        if ($astronaut === null) {
-            return new View(null, Response::HTTP_NOT_FOUND);
-        }
-
         return $astronaut;
     }
 
@@ -62,12 +70,17 @@ class AstronautController extends FOSRestController implements ClassResourceInte
      *     }
      * )
      * @Rest\View()
+     * @QueryParam(name="offset", requirements="\d+", default=null, description="Index start of request")
+     * @QueryParam(name="limit", requirements="\d+", default=null, description="limit number of records")
      */
-    public function cgetAction()
+    public function cgetAction(ParamFetcher $paramFetcher)
     {
-        $astronauts = $this->getDoctrine()->getRepository('AppBundle:Astronaut')->findAll();
+        $offset = $paramFetcher->get('offset');
+        $limit  = $paramFetcher->get('limit');
 
-        if ($astronauts === null) {
+        $astronauts = $this->getDoctrine()->getRepository('AppBundle:Astronaut')->findAllAstronauts($offset, $limit);
+
+        if ($astronauts === null || empty($astronauts)) {
             return new View(null, Response::HTTP_NOT_FOUND);
         }
 
@@ -84,8 +97,8 @@ class AstronautController extends FOSRestController implements ClassResourceInte
      * @ApiDoc(
      *     output="AppBundle\Entity\Astronaut",
      *     statusCodes={
-     *         200 = "Returned when successful",
-     *         404 = "Return when not found"
+     *         201 = "Returned when resource is created",
+     *         400 = "Return when bad request"
      *     }
      * )
      * @Rest\View()
@@ -93,7 +106,7 @@ class AstronautController extends FOSRestController implements ClassResourceInte
     public function postAction(Request $request)
     {
         $form = $this->createForm(AstronautType::class, null, [
-        'csrf_protection' => false
+            'csrf_protection' => false
         ]);
 
         $form->submit($request->request->all());
@@ -107,10 +120,7 @@ class AstronautController extends FOSRestController implements ClassResourceInte
         $em = $this->getDoctrine()->getManager();
         $em->persist($astronaut);
         $em->flush();
-        $routeOptions = [
-            'id' => $astronaut->getId(),
-            '_format' => $request->get('_format'),
-        ];
-        return null;
+
+        return new View($astronaut, Response::HTTP_CREATED);
     }
 }
