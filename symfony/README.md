@@ -4,10 +4,10 @@ For symfony
 
 Doc of API is avalaible at /api/doc
 
-For install open a terminal and :
+For install open a terminal and run :
 
-git clone git@github.com:rubencherbit/eleven2.git
+    git clone git@github.com:rubencherbit/eleven2.git
 
-composer install
+    composer install
 
-php bin/console doctrine:migrations:migrate
+    php bin/console doctrine:migrations:migrate
