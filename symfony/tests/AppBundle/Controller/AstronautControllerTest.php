@@ -24,8 +24,7 @@ class AstronautControllerTest extends WebTestCase
     }
     public function testget()
     {
-        $response = $this->client->get('/api/astronauts/1', [
-        ]);
+        $response = $this->client->get('/api/astronauts/1');
 
         $this->assertEquals(200, $response->getStatusCode());
 
@@ -40,8 +39,7 @@ class AstronautControllerTest extends WebTestCase
 
     public function testcget()
     {
-        $response = $this->client->get('/api/astronauts', [
-        ]);
+        $response = $this->client->get('/api/astronauts');
 
         $this->assertEquals(200, $response->getStatusCode());
 
@@ -57,10 +55,10 @@ class AstronautControllerTest extends WebTestCase
     public function testpost()
     {
         $data = [
-        'name' => "Mqwe",
-        'birthdate' => '01-01-1970',
-        'weight' => 70,
-        'height' => 190
+            'name'      => "Mqwe",
+            'birthdate' => '01-01-1970',
+            'weight'    => 70,
+            'height'    => 190
         ];
 
         $response = $this->client->post('/api/astronauts', ['json' => $data]);
