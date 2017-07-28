@@ -96,6 +96,7 @@ class AstronautController extends FOSRestController implements ClassResourceInte
      *
      * @ApiDoc(
      *     output="AppBundle\Entity\Astronaut",
+     *     input="AppBundle\Form\AstronautType",
      *     statusCodes={
      *         201 = "Returned when resource is created",
      *         400 = "Return when bad request"
