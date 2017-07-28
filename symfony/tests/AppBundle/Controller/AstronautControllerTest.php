@@ -3,32 +3,19 @@
 namespace AppBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use GuzzleHttp\Client;
 
 class AstronautControllerTest extends WebTestCase
 {
-    protected $client;
-    private $container;
-    private $base_uri;
-
-    protected function setUp()
-    {
-        self::bootKernel();
-
-        $this->container = self::$kernel->getContainer();
-        $this->base_uri = $this->container->get('router')->getContext()->getScheme() . '://' . $this->container->get('router')->getContext()->getHost();
-
-        $this->client = new Client([
-            'base_uri' => $this->base_uri
-        ]);
-    }
     public function testget()
     {
-        $response = $this->client->get('/api/astronauts/1');
+        $client = static::createClient();
+        $client->request('GET', '/api/astronauts/1');
+
+        $response = $client->getResponse();
 
         $this->assertEquals(200, $response->getStatusCode());
 
-        $data = json_decode($response->getBody(), true);
+        $data = json_decode($response->getContent(), true);
 
         $this->assertArrayHasKey('id', $data);
         $this->assertArrayHasKey('name', $data);
@@ -39,11 +26,14 @@ class AstronautControllerTest extends WebTestCase
 
     public function testcget()
     {
-        $response = $this->client->get('/api/astronauts');
+        $client = static::createClient();
+        $client->request('GET', '/api/astronauts');
+
+        $response = $client->getResponse();
 
         $this->assertEquals(200, $response->getStatusCode());
 
-        $data = json_decode($response->getBody(), true);
+        $data = json_decode($response->getContent(), true);
 
         $this->assertArrayHasKey('id', $data[0]);
         $this->assertArrayHasKey('name', $data[0]);
@@ -52,7 +42,17 @@ class AstronautControllerTest extends WebTestCase
         $this->assertArrayHasKey('weight', $data[0]);
     }
 
-    public function testpost()
+    public function testCgetWithLimit0()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/api/astronauts?limit=0');
+
+        $response = $client->getResponse();
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    public function testPost()
     {
         $data = [
             'name'      => "Mqwe",
@@ -60,13 +60,29 @@ class AstronautControllerTest extends WebTestCase
             'weight'    => 70,
             'height'    => 190
         ];
+        $client = static::createClient();
+        $client->request('POST', '/api/astronauts', $data);
 
-        $response = $this->client->post('/api/astronauts', ['json' => $data]);
+        $response = $client->getResponse();
         $this->assertEquals(201, $response->getStatusCode());
-        $data = json_decode($response->getBody(true), true);
+        $data = json_decode($response->getContent(true), true);
         $this->assertArrayHasKey('name', $data);
         $this->assertArrayHasKey('birthdate', $data);
         $this->assertArrayHasKey('weight', $data);
         $this->assertArrayHasKey('height', $data);
+    }
+    public function testPostWithError()
+    {
+        $data = [
+            'name'      => "",
+            'birthdate' => '01-01-1970',
+            'weight'    => 70,
+            'height'    => 190
+        ];
+        $client = static::createClient();
+        $client->request('POST', '/api/astronauts', $data);
+
+        $response = $client->getResponse();
+        $this->assertEquals(400, $response->getStatusCode());
     }
 }
