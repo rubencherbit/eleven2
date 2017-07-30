@@ -14,7 +14,7 @@ class AstronautType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name')->add('birthdate', DateType::class, array('widget' => 'single_text','format' => 'dd-MM-yyyy',))->add('height')->add('weight');
+        $builder->add('name')->add('birthdate', DateType::class, array('widget' => 'single_text','format' => 'yyyy-MM-dd',))->add('height')->add('weight');
     }
 
     /**
