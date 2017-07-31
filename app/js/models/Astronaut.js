@@ -1,5 +1,5 @@
 ElevenApp.Models.Astronaut = Backbone.Model.extend({
-    url: "http://eleven2.dev/api/astronauts",
+    url: ElevenApp.url,
 
     initialize: function Doc() {
 

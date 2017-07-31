@@ -3,7 +3,8 @@ var ElevenApp = {
     Views: {},
     Models: {},
     Collections: {},
-    Router: {}
+    Router: {},
+    url: "http://eleven2.dev/api/astronauts"
 }
 
 $(document).ready(function () {

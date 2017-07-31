@@ -1,7 +1,7 @@
 ElevenApp.Collections.Astronauts = Backbone.Collection.extend({
     model: ElevenApp.Models.Astronaut,
 
-    url: "http://eleven2.dev/api/astronauts",
+    url: ElevenApp.url,
 
     initialize: function (options) {
         if (options !== undefined) {
