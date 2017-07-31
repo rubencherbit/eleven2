@@ -11,3 +11,7 @@ For install open a terminal and run :
     composer install
 
     php bin/console doctrine:migrations:migrate
+
+For App Folder
+
+    Change URL of js/App.js by your url of api
