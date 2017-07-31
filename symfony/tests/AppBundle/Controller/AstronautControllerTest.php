@@ -56,7 +56,7 @@ class AstronautControllerTest extends WebTestCase
     {
         $data = [
             'name'      => "Mqwe",
-            'birthdate' => '01-01-1970',
+            'birthdate' => '1970-01-01',
             'weight'    => 70,
             'height'    => 190
         ];
