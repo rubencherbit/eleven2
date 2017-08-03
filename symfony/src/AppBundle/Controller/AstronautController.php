@@ -59,7 +59,6 @@ class AstronautController extends FOSRestController implements ClassResourceInte
      *     output="AppBundle\Entity\Astronaut",
      *     statusCodes={
      *         200 = "Returned when successful",
-     *         404 = "Return when not found"
      *     }
      * )
      * @Rest\View()
@@ -72,10 +71,6 @@ class AstronautController extends FOSRestController implements ClassResourceInte
         $limit  = $paramFetcher->get('limit');
 
         $astronauts = $this->getDoctrine()->getRepository('AppBundle:Astronaut')->findAllAstronauts($offset, $limit);
-
-        if ($astronauts === null || empty($astronauts)) {
-            return new View(null, Response::HTTP_NOT_FOUND);
-        }
 
         return $astronauts;
     }
