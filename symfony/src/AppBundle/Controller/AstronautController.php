@@ -25,12 +25,6 @@ class AstronautController extends FOSRestController implements ClassResourceInte
 {
     /**
      * Gets an individual Astronaut
-     *
-     * @param int $id
-     * @return mixed
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     *
      * @ApiDoc(
      *     output="AppBundle\Entity\Astronaut",
      *     statusCodes={
@@ -46,7 +40,6 @@ class AstronautController extends FOSRestController implements ClassResourceInte
      *      }
      *     }
      * )
-     * @Rest\View()
      * @ParamConverter("astronaut", class="AppBundle:Astronaut")
      */
     public function getAction(Astronaut $astronaut)
